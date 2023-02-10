@@ -1,0 +1,39 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let tab of tabs">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{tab | titlecase}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="btn" *ngFor="let btn of btns">
+            <button mat-icon-button color="primary" matTooltip="{{btn}} {{tab}}" (click)="onSelect(btn + ' ' + tab)">
+              <mat-icon>{{btn}}</mat-icon>
+            </button>
+            <div class="name">
+              {{btn}}
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <i class="fa fa-book fa-2x me-3"></i>
+      <span class="fs-4 fw-bold">{{title | titlecase}}</span>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

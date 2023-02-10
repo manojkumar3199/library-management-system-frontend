@@ -1,0 +1,40 @@
+<div class="container mt-3 p-3 bg-white">
+    <p class="text-capitalize fs-4 fw-bold">add new book category</p>
+    <hr>
+</div>
+<div class="container mt-3 alert alert-danger" *ngIf="error"><strong>Error: </strong>{{error.error?.error}}
+    {{error.error?.message}}
+</div>
+<div class="container mt-3 p-3 bg-white">
+    <div class="d-flex justify-content-center">
+        <form class="d-flex flex-column" [formGroup]="categoryForm" #formGroupDirective="ngForm"
+            (ngSubmit)="saveNewCategory()">
+            <mat-form-field appearance="outline" class="mb-4">
+                <mat-label>Category Name</mat-label>
+                <input matInput placeholder="e.g: Adventure" formControlName="categoryName">
+                <mat-error *ngIf="getCategoryName?.errors?.['required'] && getCategoryName?.touched"
+                    class="text-capitalize">category name is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="getCategoryName?.errors?.['minlength'] && getCategoryName?.touched"
+                    class="text-capitalize">category name is
+                    <strong>
+                        at least of {{getCategoryName?.errors?.['minlength'].requiredLength}} chars
+                    </strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="mb-4">
+                <mat-label>Short Name</mat-label>
+                <input matInput placeholder="e.g: ADV" formControlName="shortName">
+                <mat-error *ngIf="getShortName?.errors?.['required'] && getShortName?.touched" class="text-capitalize">
+                    short name is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+            <div class="d-flex justify-content-between">
+                <button type="submit" mat-raised-button color="primary" class="text-capitalize fw-semibold"
+                    [disabled]="categoryForm.invalid">save</button>
+                <button type="button" mat-raised-button color="accent" class="text-capitalize fw-semibold"
+                    (click)="reset()">reset</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,92 @@
+<div class="container mt-3 p-3 bg-white">
+    <p class="fs-4 fw-bold">Add New Book</p>
+    <hr>
+</div>
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
+</div>
+<div class="container mt-3 p-3 bg-white" *ngIf="loaded">
+    <mat-stepper [linear]="true" orientation="vertical" #stepper>
+        <mat-step [stepControl]="addNewBookForm" [editable]="firstStep" #step>
+            <div class="d-flex justify-content-center mt-5">
+                <form class="d-flex flex-column" [formGroup]="addNewBookForm" (ngSubmit)="saveNewBook(stepper)"
+                    #formGroupDirective="ngForm">
+                    <ng-template matStepLabel>Fill Out Your Book Details</ng-template>
+                    <mat-form-field appearance="outline" class="mb-4">
+                        <mat-label>Book category</mat-label>
+                        <mat-select formControlName="category">
+                            <mat-option *ngFor="let category of categories" value="{{category | json}}">
+                                {{category.categoryName}}</mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="(getBookCategory?.invalid && getBookCategory?.touched) || (step.interacted && getBookCategory?.invalid && getBookCategory?.untouched)">
+                            Please
+                            <Strong>Select</Strong> The Book category
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="mb-4">
+                        <mat-label>Book title</mat-label>
+                        <input matInput placeholder="e.g: Effective Java" formControlName="title">
+                        <mat-error
+                            *ngIf="(getBookTitle?.errors?.['required'] && getBookTitle?.touched) || (step.interacted && getBookTitle?.untouched && getBookTitle?.errors?.['required'])">
+                            Book Title Is
+                            <strong>Required</strong>
+                        </mat-error>
+                        <mat-error
+                            *ngIf="(getBookTitle?.errors?.['minlength'] && getBookTitle?.touched) || (step.interacted && getBookTitle?.untouched && getBookTitle?.errors?.['minlength'])">
+                            Book Title
+                            Should Have
+                            <strong>
+                                At Least {{getBookTitle?.errors?.['minlength']?.requiredLength}} Chars
+                            </strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="mb-4">
+                        <mat-label>Book author</mat-label>
+                        <input matInput placeholder="e.g: Joshua Bloch" formControlName="author">
+                        <mat-error
+                            *ngIf="(getBookAuthor?.errors?.['required'] && getBookAuthor?.touched) || (step.interacted && getBookAuthor?.untouched && getBookAuthor?.errors?.['required'])">
+                            Book Author Is
+                            <strong>Required</strong>
+                        </mat-error>
+                        <mat-error
+                            *ngIf="getBookAuthor?.errors?.['minlength'] && getBookAuthor?.touched || (step.interacted && getBookAuthor?.untouched && getBookAuthor?.errors?.['minlength'])">
+                            Book Author
+                            Should Have
+                            <strong>
+                                At Least {{getBookAuthor?.errors?.['minlength'].requiredLength}} Chars
+                            </strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="mb-4">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput placeholder="It's a perfect book for beginners..."
+                            formControlName="description"></textarea>
+                    </mat-form-field>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" mat-raised-button color="primary"
+                            [disabled]="addNewBookForm.invalid">Save</button>
+                        <button type="button" mat-raised-button color="accent" (click)="reset(stepper)">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </mat-step>
+        <mat-step label="Add Book Image" [editable]="secondStep">
+            <div class="d-flex justify-content-center mt-5">
+                <button mat-raised-button (click)="fileInput.click()">Choose File</button>
+                <input hidden type="file" #fileInput (change)="onFileSelect($event)">
+                <span class="align-self-center ms-4">{{selectedFile?.name}}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="button" mat-raised-button color="primary" [disabled]="!selectedFile"
+                    (click)="saveNewBookImage(stepper)">Upload</button>
+                <button type="button" mat-raised-button color="accent" (click)="skipImageUploading(stepper)">Skip</button>
+            </div>
+        </mat-step>
+        <mat-step label="Done">
+            <div class="alert alert-success mt-5">
+                Your Book Is Added Successfully!
+            </div>
+        </mat-step>
+    </mat-stepper>
+</div>
