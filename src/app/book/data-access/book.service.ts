@@ -24,4 +24,10 @@ export class BookService {
   public deleteBook(bookId: number): Observable<Object> {
     return this.http.delete(this.ROOT_URL + "/book/" + bookId);
   }
+
+  public saveBookImage(bookId: number, bookImage: File): Observable<string> {
+    let formData = new FormData();
+    formData.append("bookImage", bookImage, bookImage.name);
+    return this.http.post<string>(this.ROOT_URL + "/book/" + bookId + "/uploadimage", formData);
+  }
 }

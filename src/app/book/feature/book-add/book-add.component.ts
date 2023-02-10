@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatStep, MatStepper } from '@angular/material/stepper';
+import { MatStepper } from '@angular/material/stepper';
 import { CategoryService } from 'src/app/category/data-access/category.service';
 import { Book } from 'src/app/shared/data-access/book';
 import { Category } from 'src/app/shared/data-access/category';
@@ -25,6 +25,8 @@ export class BookAddComponent implements OnInit {
 
   public addNewBookForm!: FormGroup;
   @ViewChild("formGroupDirective") private formGroupDirective!: FormGroupDirective;
+
+  public currentSavedBook: Book | null = null;
 
   constructor(private categoryService: CategoryService, private bookService: BookService, private storeService: StoreService, private fb: FormBuilder, private _snackBar: MatSnackBar) { }
 
@@ -79,8 +81,9 @@ export class BookAddComponent implements OnInit {
 
     this.bookService.saveNewBook(newBook).subscribe({
       next: data => {
-        this._snackBar.open(data.title + "added successfully!", "", { duration: 3000 });
+        this._snackBar.open(data.title + " added successfully!", "", { duration: 3000 });
         this.storeService.addBook(data);
+        this.currentSavedBook = data;
         this.firstStep = false;
         stepper.next();
       },
@@ -101,13 +104,29 @@ export class BookAddComponent implements OnInit {
     this.selectedFile = event.target.files[0] ?? null;
   }
 
-  public saveNewBookImage(stepper: MatStepper): void {
-    console.log(this.selectedFile);
-    this.secondStep = false;
-    stepper.next();
+  public saveBookImage(stepper: MatStepper): void {
+    if (this.error !== null)
+      this.error = null;
+
+    let bookId = this.currentSavedBook?.id as number;
+    let bookImage = this.selectedFile as File;
+    this.bookService.saveBookImage(bookId, bookImage).subscribe({
+      next: data => {
+        this._snackBar.open("Image Uploaded Successfully!", "", { duration: 3000 });
+        this.secondStep = false;
+        stepper.next();
+      },
+      error: error => {
+        console.log(error);
+        this.error = error;
+      }
+    });
   }
 
   public skipImageUploading(stepper: MatStepper) {
+    if (this.error !== null)
+      this.error = null;
+
     this.secondStep = false;
     stepper.next();
   }

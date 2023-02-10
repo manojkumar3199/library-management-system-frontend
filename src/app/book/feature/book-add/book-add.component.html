@@ -78,9 +78,10 @@
                 <span class="align-self-center ms-4">{{selectedFile?.name}}</span>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="button" mat-raised-button color="primary" [disabled]="!selectedFile"
-                    (click)="saveNewBookImage(stepper)">Upload</button>
-                <button type="button" mat-raised-button color="accent" (click)="skipImageUploading(stepper)">Skip</button>
+                <button type="button" mat-raised-button color="primary"
+                    [disabled]="(!selectedFile || !currentSavedBook)" (click)="saveBookImage(stepper)">Upload</button>
+                <button type="button" mat-raised-button color="accent"
+                    (click)="skipImageUploading(stepper)">Skip</button>
             </div>
         </mat-step>
         <mat-step label="Done">
