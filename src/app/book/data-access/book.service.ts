@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Book } from 'src/app/shared/data-access/book';
+import { Image } from 'src/app/shared/data-access/image';
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +23,18 @@ export class BookService {
   }
 
   public deleteBook(bookId: number): Observable<Object> {
+    console.log(bookId);
     return this.http.delete(this.ROOT_URL + "/book/" + bookId);
   }
 
-  public saveBookImage(bookId: number, bookImage: File): Observable<string> {
+  public saveBookImage(bookId: number, bookImage: File): Observable<Image> {
     let formData = new FormData();
     formData.append("bookImage", bookImage, bookImage.name);
-    return this.http.post<string>(this.ROOT_URL + "/book/" + bookId + "/uploadimage", formData);
+    console.log(formData);
+    return this.http.post<Image>(this.ROOT_URL + "/book/" + bookId + "/uploadimage", formData);
+  }
+
+  public getBookById(bookId: number): Observable<Book> {
+    return this.http.get<Book>(this.ROOT_URL + "/book/" + bookId);
   }
 }

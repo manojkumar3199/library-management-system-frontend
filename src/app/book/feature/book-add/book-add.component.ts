@@ -113,6 +113,7 @@ export class BookAddComponent implements OnInit {
     this.bookService.saveBookImage(bookId, bookImage).subscribe({
       next: data => {
         this._snackBar.open("Image Uploaded Successfully!", "", { duration: 3000 });
+        this.storeService.addBookImage(bookId, data);
         this.secondStep = false;
         stepper.next();
       },

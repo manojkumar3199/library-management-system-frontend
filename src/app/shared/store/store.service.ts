@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { Book } from '../data-access/book';
 import { Category } from '../data-access/category';
+import { Image } from '../data-access/image';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +10,8 @@ import { Category } from '../data-access/category';
 export class StoreService {
 
   private categories$ = new BehaviorSubject<Category[]>([]);
-  private books$ = new BehaviorSubject<Book[]>([]);
 
   public loaded = false;
-  public booksLoaded = false;
 
   public loadCategories(): Observable<Category[]> {
     return this.categories$;
@@ -36,13 +35,13 @@ export class StoreService {
   }
 
   //book
-  public setBooks(books: Book[]): void {
+  private books$ = new BehaviorSubject<Book[]>([]);
+  public currentBooks$ = this.books$.asObservable();
+  public booksLoaded = false;
+
+  public loadBooks(books: Book[]): void {
     this.books$.next(books);
     this.booksLoaded = true;
-  }
-
-  public loadBooks(): Observable<Book[]> {
-    return this.books$;
   }
 
   public removeBook(bookId: number): void {
@@ -51,6 +50,16 @@ export class StoreService {
 
   public addBook(newBook: Book): void {
     this.books$.next([...this.books$.value, newBook]);
+  }
+
+  public addBookImage(bookId: number, image: Image): void {
+    this.books$.next(this.books$.value.map(book => {
+      if (book.id === bookId) {
+        book.imageUrl = image.imageUrl;
+        return book;
+      }
+      return book;
+    }));
   }
 
   constructor() { }

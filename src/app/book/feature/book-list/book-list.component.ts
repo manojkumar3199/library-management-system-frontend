@@ -1,7 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { Book } from 'src/app/shared/data-access/book';
 import { StoreService } from 'src/app/shared/store/store.service';
+import { DeleteDialogComponent } from 'src/app/shared/ui/delete-dialog/delete-dialog.component';
 import { BookService } from '../../data-access/book.service';
 
 @Component({
@@ -11,31 +16,52 @@ import { BookService } from '../../data-access/book.service';
 })
 export class BookListComponent implements OnInit {
   public error: HttpErrorResponse | null = null;
-  public books: Book[] = [];
+  public books$!: Observable<Book[]>;
 
   public defaultBookImage = "assets/images/default-book-image.jpg";
 
-  constructor(private bookService: BookService, private storeService: StoreService) { }
+  constructor(private bookService: BookService, private storeService: StoreService, private _snackBar: MatSnackBar, private _dialog: MatDialog, private router: Router) { }
 
   ngOnInit(): void {
     if (!this.storeService.booksLoaded) {
       this.bookService.getAllBooks().subscribe({
         next: data => {
-          this.books = data;
-          this.storeService.setBooks(data);
+          this.storeService.loadBooks(data);
         },
         error: error => {
           console.log(error);
           this.error = error;
         }
       });
-    } else {
-      this.storeService.loadBooks().subscribe(books => this.books = books);
     }
+    this.books$ = this.storeService.currentBooks$;
   }
 
   public applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     console.log(filterValue);
+  }
+
+  public deleteBook(savedBook: Book): void {
+    this._dialog.open(DeleteDialogComponent, { data: { type: "book", name: savedBook.title } }).afterClosed().subscribe(result => {
+      if (result === "cancel" || result === undefined) {
+        console.log("canceling delete operation!");
+      } else {
+        this.bookService.deleteBook(savedBook.id).subscribe({
+          next: data => {
+            this._snackBar.open(savedBook.title + " deleted successfully!", "", { duration: 3000 });
+            this.storeService.removeBook(savedBook.id);
+          },
+          error: error => {
+            console.log(error);
+            this.error = error;
+          }
+        });
+      }
+    });
+  }
+
+  public editBook(savedBook: Book): void {
+    this.router.navigate(["book/edit", savedBook.id]);
   }
 }

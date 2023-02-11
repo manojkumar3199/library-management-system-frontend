@@ -1,1 +1,43 @@
-<p>book-edit works!</p>
+<div class="container bg-white mt-3 p-3">
+    <p class="fs-4 fw-bold">Edit book</p>
+    <hr>
+</div>
+
+<div class="container mt-3">
+    <div class="row align-items-center">
+        <div class="col-12 col-md-4">
+            <div class="d-flex flex-column">
+                <img src="assets\images\default-book-image.jpg" class="img-thumbnail" alt="Book Image">
+                <button mat-raised-button class="my-3">Choose</button>
+                <button mat-raised-button color="primary">Upload</button>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-8">
+            <form class="d-flex flex-column bg-white mt-3 p-3" [formGroup]="editBookForm">
+                <mat-form-field appearance="outline">
+                    <mat-label>Book Category</mat-label>
+                    <mat-select formControlName="category" [(value)]="selectedCategory">
+                        <mat-option *ngFor="let category of categories"
+                            [value]="category">{{category.categoryName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Book Title</mat-label>
+                    <input matInput formControlName="title">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Book Author</mat-label>
+                    <input matInput formControlName="author">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Book Description</mat-label>
+                    <textarea matInput formControlName="description"></textarea>
+                </mat-form-field>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" mat-raised-button color="primary" (click)="updateBook(selectedCategory)">Update</button>
+                    <button type="button" mat-raised-button color="accent">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
