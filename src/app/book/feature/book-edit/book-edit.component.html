@@ -3,39 +3,81 @@
     <hr>
 </div>
 
-<div class="container mt-3">
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
+</div>
+
+<div class="container mt-3" *ngIf="loaded">
     <div class="row align-items-center">
-        <div class="col-12 col-md-4">
-            <div class="d-flex flex-column">
-                <img src="assets\images\default-book-image.jpg" class="img-thumbnail" alt="Book Image">
-                <button mat-raised-button class="my-3">Choose</button>
-                <button mat-raised-button color="primary">Upload</button>
+        <div class="col-12 col-md-4 align-self-start">
+            <div class="d-flex flex-column mt-3">
+
+                <img [src]="imageSrc" alt="Book Image" class="img-thumbnail" (error)="setDefaultImage($event)">
+
+                <button mat-raised-button class="my-3" (click)="fileInput.click()">Browse Image</button>
+                <input hidden type="file" #fileInput (change)="onFileSelect($event)">
+                <button mat-raised-button color="primary" [disabled]="!selectedFile" (click)="updateImage()">Change
+                    Image</button>
             </div>
         </div>
         <div class="col-sm-6 col-md-8">
-            <form class="d-flex flex-column bg-white mt-3 p-3" [formGroup]="editBookForm">
-                <mat-form-field appearance="outline">
-                    <mat-label>Book Category</mat-label>
-                    <mat-select formControlName="category" [(value)]="selectedCategory">
-                        <mat-option *ngFor="let category of categories"
-                            [value]="category">{{category.categoryName}}</mat-option>
-                    </mat-select>
+            <form class="d-flex flex-column bg-white mt-3 p-3" [formGroup]="editBookForm" #formGroupDirective="ngForm">
+                <mat-form-field appearance="outline" class="mb-4">
+                    <mat-label>Book Id</mat-label>
+                    <input matInput formControlName="id" readonly>
+                    <mat-error *ngIf="getBookId?.invalid && getBookId?.touched">
+                        Category is <Strong>Required</Strong>
+                    </mat-error>
                 </mat-form-field>
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" class="mb-4">
+                    <mat-label>Book Category</mat-label>
+                    <mat-select formControlName="category" [compareWith]="compareCategories">
+                        <mat-option *ngFor="let category of categories" [value]="category">{{category.categoryName}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="getBookCategory?.invalid && getBookCategory?.touched">
+                        Please
+                        <Strong>Select</Strong> The Book category
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mb-4">
                     <mat-label>Book Title</mat-label>
                     <input matInput formControlName="title">
+                    <mat-error *ngIf="getBookTitle?.errors?.['required'] && getBookTitle?.touched">
+                        Book Title Is
+                        <strong>Required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="getBookTitle?.errors?.['minlength'] && getBookTitle?.touched">
+                        Book Title
+                        Should Have
+                        <strong>
+                            At Least {{getBookTitle?.errors?.['minlength']?.requiredLength}} Chars
+                        </strong>
+                    </mat-error>
                 </mat-form-field>
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" class="mb-4">
                     <mat-label>Book Author</mat-label>
                     <input matInput formControlName="author">
+                    <mat-error *ngIf="getBookAuthor?.errors?.['required'] && getBookAuthor?.touched">
+                        Book Author Is
+                        <strong>Required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="getBookAuthor?.errors?.['minlength'] && getBookAuthor?.touched">
+                        Book Author
+                        Should Have
+                        <strong>
+                            At Least {{getBookAuthor?.errors?.['minlength'].requiredLength}} Chars
+                        </strong>
+                    </mat-error>
                 </mat-form-field>
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" class="mb-4">
                     <mat-label>Book Description</mat-label>
                     <textarea matInput formControlName="description"></textarea>
                 </mat-form-field>
                 <div class="d-flex justify-content-between">
-                    <button type="submit" mat-raised-button color="primary" (click)="updateBook(selectedCategory)">Update</button>
-                    <button type="button" mat-raised-button color="accent">Reset</button>
+                    <button type="submit" mat-raised-button color="primary" (click)="updateBook()"
+                        [disabled]="editBookForm.invalid || editBookForm.pristine">Update</button>
+                    <button type="button" mat-raised-button color="accent" (click)="reset()">Reset</button>
                 </div>
             </form>
         </div>

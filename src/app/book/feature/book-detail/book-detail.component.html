@@ -1,1 +1,35 @@
-<p>book-detail works!</p>
+<div class="container mt-3 p-3 bg-white">
+    <p class="fs-4 fw-bold">Book Details</p>
+    <hr>
+</div>
+
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
+</div>
+
+<div class="container mt-3 p-3" *ngIf="loaded">
+    <div class="d-flex flex-column align-items-center">
+
+        <div class="card mb-3">
+            <h5 class="card-header">Book Id: {{savedBook.id}}</h5>
+            <div class="row g-0">
+                <div class="col-md-4 bg-success">
+                    <div class="d-flex flex-column justify-content-center h-100 ">
+                        <img [src]="imgSrc" class="img-fluid" alt="Book Image">
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body h-100">
+                        <div class="d-flex flex-column justify-content-between h-100">
+                            <h5 class="card-title">{{savedBook.title}}</h5>
+                            <p class="card-text">{{savedBook.description}}</p>
+                            <p class="card-text"><small class="text-muted">{{savedBook.category.categoryName}}</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

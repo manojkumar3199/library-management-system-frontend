@@ -6,5 +6,6 @@ export interface Book {
     title: string,
     author: string,
     description: string,
-    imageUrl: string
+    imageUrl: string,
+    reserved: boolean
 }

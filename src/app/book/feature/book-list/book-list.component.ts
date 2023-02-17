@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Book } from 'src/app/shared/data-access/book';
 import { StoreService } from 'src/app/shared/store/store.service';
 import { DeleteDialogComponent } from 'src/app/shared/ui/delete-dialog/delete-dialog.component';
@@ -17,8 +17,6 @@ import { BookService } from '../../data-access/book.service';
 export class BookListComponent implements OnInit {
   public error: HttpErrorResponse | null = null;
   public books$!: Observable<Book[]>;
-
-  public defaultBookImage = "assets/images/default-book-image.jpg";
 
   constructor(private bookService: BookService, private storeService: StoreService, private _snackBar: MatSnackBar, private _dialog: MatDialog, private router: Router) { }
 
@@ -63,5 +61,14 @@ export class BookListComponent implements OnInit {
 
   public editBook(savedBook: Book): void {
     this.router.navigate(["book/edit", savedBook.id]);
+  }
+
+  public viewBook(savedBook: Book): void {
+    this.router.navigate(["book/detail", savedBook.id]);
+  }
+
+  public setDefaultImage(event: any): void {
+    if (event.target.src)
+      event.target.src = "assets/images/default-book-image.jpg";
   }
 }

@@ -35,6 +35,17 @@ export class BookService {
   }
 
   public getBookById(bookId: number): Observable<Book> {
+    console.log("loading book: " + bookId);
     return this.http.get<Book>(this.ROOT_URL + "/book/" + bookId);
+  }
+
+  public updateBook(modifiedBook: Book): Observable<Book> {
+    console.log(modifiedBook);
+    return this.http.put<Book>(this.ROOT_URL + "/book/" + modifiedBook.id + "/category/" + modifiedBook.category.id, modifiedBook);
+  }
+
+  public getBooksByCategory(categoryId: number): Observable<Book[]> {
+    console.log("loading books of category: " + categoryId);
+    return this.http.get<Book[]>(this.ROOT_URL + "/book/category/" + categoryId);
   }
 }

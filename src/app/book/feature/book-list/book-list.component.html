@@ -2,9 +2,11 @@
     <p class="text-capitalize fs-4 fw-bold">list of books</p>
     <hr>
 </div>
-<div class="container mt-3 alert alert-danger" *ngIf="error"><strong>Error: </strong>{{error.error?.path}}
-    {{error.error?.error}} row-cols-2
+
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
 </div>
+
 <div class="container mt-3 pt-3 px-3 d-flex flex-column bg-white">
     <mat-form-field>
         <mat-label>Filter book</mat-label>
@@ -15,21 +17,26 @@
 <div class="container mt-3 p-3">
     <div class="row gy-5 row-cols-md-2 row-cols-lg-3">
         <div class="col" *ngFor="let book of books$ | async">
-            <mat-card class="example-card">
+            <mat-card>
                 <mat-card-header>
-                    <mat-card-title class="fw-bold fs-4">{{book.title}}</mat-card-title>
-                    <mat-card-subtitle>{{book.category.categoryName}}</mat-card-subtitle>
+                    <mat-card-title-group>
+                        <mat-card-title>
+                            <p class="fs-4 fw-bold">{{book.title}}</p>
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            <p>{{book.category.categoryName}}</p>
+                        </mat-card-subtitle>
+                        <p *ngIf="book.reserved" mat-card-sm-image><span class="badge text-bg-warning">Reserved</span>
+                        </p>
+                    </mat-card-title-group>
                 </mat-card-header>
-                <img mat-card-image *ngIf="book.imageUrl === null; else elseBlock" [src]="defaultBookImage"
-                    alt="Default Book Image">
-                <ng-template #elseBlock>
-                    <img src={{book.imageUrl}} alt="Book Image">
-                </ng-template>
+                <img mat-card-image [src]="book.imageUrl || 'assets/images/default-book-image.jpg'"
+                    alt="Default Book Image" style="max-width: 400px;" (error)="setDefaultImage($event)" />
                 <mat-card-content>
                     <p>{{book.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>
-                    <button mat-raised-button class="fw-semibold me-2">View</button>
+                    <button mat-raised-button class="fw-semibold me-2" (click)="viewBook(book)">View</button>
                     <button mat-raised-button color="primary" class="fw-semibold me-2"
                         (click)="editBook(book)">Edit</button>
                     <button mat-raised-button color="warn" class="fw-semibold"

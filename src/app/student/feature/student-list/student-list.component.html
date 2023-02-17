@@ -1,1 +1,56 @@
-<p>student-list works!</p>
+<div class="container mt-3 p-3 bg-white">
+    <p class="fs-4 fw-bold">List Of Students</p>
+    <hr>
+</div>
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
+</div>
+<div class="container mt-3 pt-3 px-3 d-flex flex-column bg-white">
+    <mat-form-field>
+        <mat-label>Filter Student</mat-label>
+        <input matInput (keyup)="applyFilter($event)">
+    </mat-form-field>
+</div>
+
+<div class="container mt-3 p-3 d-flex flex-column align-items-center">
+    <!-- card-start -->
+    <div class="card mb-3 text-center" style="max-width: 540px;" *ngFor="let student of students$ | async">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <div class="d-flex flex-column justify-content-center position-relative w-100 h-100">
+                    <img [src]="student.imageUrl || 'assets/images/default-student-image.png'" alt="Student Image"
+                        class="rounded-circle w-100 position-relative border border-5 border-white shadow text-white"
+                        style="z-index: 1;" onerror="this.src='assets/images/default-student-image.png';">
+                    <div class="position-absolute top-0 start-0 w-100" style="background-color: #3f51b5; height: 85%;">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+
+                    <h5 class="card-title text-capitalize fs-2">{{student.name}}</h5>
+                    <p class="card-text"><small class="text-muted">{{student.stream}}</small></p>
+                    <p class="card-text">
+                        <i class="fa fa-envelope"></i> {{student.email}}
+                    </p>
+                    <p class="card-text">
+                        <i class="fa fa-phone"></i> {{student.contact}}
+                    </p>
+                    <div class="d-flex justify-content-evenly">
+                        <button mat-fab class="bg-success" (click)="viewStudent(student)">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button mat-fab color="primary" (click)="editStudent(student)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-fab color="warn" (click)="deleteStudent(student)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- card-end -->
+</div>

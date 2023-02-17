@@ -1,1 +1,120 @@
-<p>student-add works!</p>
+<div class="container mt-3 p-3 bg-white">
+    <p class="fs-4 fw-bold">Add New Student</p>
+    <hr>
+</div>
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
+</div>
+<div class="container mt-3 p-3 bg-white">
+    <mat-stepper [linear]="true" orientation="vertical" #stepper>
+        <mat-step [stepControl]="addNewStudentForm" [editable]="firstStep" #step>
+            <div class="d-flex justify-content-center mt-5">
+                <form class="d-flex flex-column" [formGroup]="addNewStudentForm" (ngSubmit)="saveNewStudent(stepper)"
+                    #formGroupDirective="ngForm">
+                    <ng-template matStepLabel>Fill Out Your Book Details</ng-template>
+                    <mat-form-field appearance="outline" class="mb-4">
+                        <mat-label>Stream</mat-label>
+                        <input matInput placeholder="e.g: Bsc" formControlName="stream">
+                        <mat-error
+                            *ngIf="(getStudentStream?.errors?.['required'] && getStudentStream?.touched) || (step.interacted && getStudentStream?.untouched && getStudentStream?.errors?.['required'])">
+                            Stream <strong>Required</strong>
+                        </mat-error>
+                        <mat-error
+                            *ngIf="(getStudentStream?.errors?.['minlength'] && getStudentStream?.touched) || (step.interacted && getStudentStream?.untouched && getStudentStream?.errors?.['minlength'])">
+                            Stream Should Have
+                            <strong>
+                                At Least {{getStudentStream?.errors?.['minlength']?.requiredLength}} Chars
+                            </strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="mb-4">
+                        <mat-label>Name</mat-label>
+                        <input matInput placeholder="e.g: Akash Sathi" formControlName="name">
+                        <mat-error
+                            *ngIf="(getStudentName?.errors?.['required'] && getStudentName?.touched) || (step.interacted && getStudentName?.untouched && getStudentName?.errors?.['required'])">
+                            Student Name Is <strong>Required</strong>
+                        </mat-error>
+                        <mat-error
+                            *ngIf="(getStudentName?.errors?.['minlength'] && getStudentName?.touched) || (step.interacted && getStudentName?.untouched && getStudentName?.errors?.['minlength'])">
+                            Student Name Should Have
+                            <strong>
+                                At Least {{getStudentName?.errors?.['minlength'].requiredLength}} Chars
+                            </strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <div class="d-flex flex-column align-items-center mb-5">
+                        <mat-radio-group formControlName="gender">
+                            <mat-radio-button value="male">Male</mat-radio-button>
+                            <mat-radio-button value="female">Female</mat-radio-button>
+                            <mat-radio-button value="others">Other</mat-radio-button>
+                        </mat-radio-group>
+                        <div class="text-danger"
+                            *ngIf="(getStudentGender?.invalid && getStudentGender?.touched) || (step.interacted && getStudentGender?.invalid && getStudentGender?.untouched)">
+                            Please <Strong>Select</Strong> Your Gender
+                        </div>
+                    </div>
+                    <mat-form-field appearance="outline" class="mb-4">
+                        <mat-label>Date Of Birth</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="dob" placeholder="MM/DD/YYYY">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+                        <mat-error
+                            *ngIf="(getStudentDob?.errors?.['required'] && getStudentDob?.touched) || (step.interacted && getStudentDob?.untouched && getStudentDob?.errors?.['required'])">
+                            Date Of Birth Is <strong>Required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="mb-4">
+                        <mat-label>Contact Number</mat-label>
+                        <span matPrefix>+91 &nbsp;</span>
+                        <input type="tel" matInput placeholder="9857478744" formControlName="contact">
+                        <mat-icon matSuffix>call</mat-icon>
+                        <mat-error
+                            *ngIf="(getStudentContact?.errors?.['required'] && getStudentContact?.touched) || (step.interacted && getStudentContact?.untouched && getStudentContact?.errors?.['required'])">
+                            Contact Number Is <strong>Required</strong>
+                        </mat-error>
+                        <mat-error
+                            *ngIf="(getStudentContact?.errors?.['pattern'] && getStudentContact?.touched) || (step.interacted && getStudentContact?.untouched && getStudentContact?.errors?.['pattern'])">
+                            <strong>Invalid</strong> Contact Number
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="mb-4">
+                        <mat-label>Email</mat-label>
+                        <input matInput placeholder="e.g: akashsathi@gmail.com" formControlName="email">
+                        <mat-error
+                            *ngIf="(getStudentEmail?.errors?.['required'] && getStudentEmail?.touched) || (step.interacted && getStudentEmail?.untouched && getStudentEmail?.errors?.['required'])">
+                            Email Is <strong>Required</strong>
+                        </mat-error>
+                        <mat-error
+                            *ngIf="(getStudentEmail?.errors?.['pattern'] && getStudentEmail?.touched) || (step.interacted && getStudentEmail?.untouched && getStudentEmail?.errors?.['pattern'])">
+                            <strong>Invalid</strong> Email
+                        </mat-error>
+                    </mat-form-field>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" mat-raised-button color="primary"
+                            [disabled]="addNewStudentForm.invalid">Save</button>
+                        <button type="button" mat-raised-button color="accent" (click)="reset(stepper)">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </mat-step>
+        <mat-step label="Add Student Image" [editable]="secondStep">
+            <div class="d-flex justify-content-center mt-5">
+                <button mat-raised-button (click)="fileInput.click()">Choose File</button>
+                <input hidden type="file" #fileInput (change)="onFileSelect($event)">
+                <span class="align-self-center ms-4">{{selectedFile?.name}}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="button" mat-raised-button color="primary"
+                    [disabled]="(!selectedFile || !currentSavedStudent)"
+                    (click)="saveStudentImage(stepper)">Upload</button>
+                <button type="button" mat-raised-button color="accent"
+                    (click)="skipImageUploading(stepper)">Skip</button>
+            </div>
+        </mat-step>
+        <mat-step label="Done">
+            <div class="alert alert-success mt-5">
+                Student Added Successfully!
+            </div>
+        </mat-step>
+    </mat-stepper>
+</div>

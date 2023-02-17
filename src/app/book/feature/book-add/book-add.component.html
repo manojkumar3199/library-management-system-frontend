@@ -50,7 +50,7 @@
                             <strong>Required</strong>
                         </mat-error>
                         <mat-error
-                            *ngIf="getBookAuthor?.errors?.['minlength'] && getBookAuthor?.touched || (step.interacted && getBookAuthor?.untouched && getBookAuthor?.errors?.['minlength'])">
+                            *ngIf="(getBookAuthor?.errors?.['minlength'] && getBookAuthor?.touched) || (step.interacted && getBookAuthor?.untouched && getBookAuthor?.errors?.['minlength'])">
                             Book Author
                             Should Have
                             <strong>

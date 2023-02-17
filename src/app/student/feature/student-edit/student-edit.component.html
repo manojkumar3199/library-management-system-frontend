@@ -1,1 +1,108 @@
-<p>student-edit works!</p>
+<div class="container bg-white mt-3 p-3">
+    <p class="fs-4 fw-bold">Edit Student</p>
+    <hr>
+</div>
+
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
+</div>
+
+<div class="container mt-3" *ngIf="loaded">
+    <div class="row align-items-center">
+        <div class="col-12 col-md-4 align-self-start">
+            <div class="d-flex flex-column mt-3">
+
+                <img [src]="imageSrc" alt="Book Image" class="img-thumbnail">
+
+                <button mat-raised-button class="my-3" (click)="fileInput.click()">Browse Image</button>
+                <input hidden type="file" #fileInput (change)="onFileSelect($event)">
+                <button mat-raised-button color="primary" [disabled]="!selectedFile" (click)="updateImage()">Change
+                    Image</button>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-8">
+            <form class="d-flex flex-column bg-white mt-3 p-3" [formGroup]="editStudentForm"
+                #formGroupDirective="ngForm" (ngSubmit)="updateStudent()">
+                <mat-form-field appearance="outline" class="mb-4">
+                    <mat-label>Student Id</mat-label>
+                    <input matInput placeholder="e.g: Bsc" formControlName="id">
+                    <mat-error *ngIf="getStudentId?.errors?.['required'] && getStudentId?.touched">
+                        Student Id is <strong>Required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mb-4">
+                    <mat-label>Stream</mat-label>
+                    <input matInput placeholder="e.g: Bsc" formControlName="stream">
+                    <mat-error *ngIf="getStudentStream?.errors?.['required'] && getStudentStream?.touched">
+                        Stream is <strong>Required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="getStudentStream?.errors?.['minlength'] && getStudentStream?.touched">
+                        Stream Should Have
+                        <strong>
+                            At Least {{getStudentStream?.errors?.['minlength']?.requiredLength}} Chars
+                        </strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mb-4">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="e.g: Akash Sathi" formControlName="name">
+                    <mat-error *ngIf="getStudentName?.errors?.['required'] && getStudentName?.touched">
+                        Student Name Is <strong>Required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="getStudentName?.errors?.['minlength'] && getStudentName?.touched">
+                        Student Name Should Have
+                        <strong>
+                            At Least {{getStudentName?.errors?.['minlength'].requiredLength}} Chars
+                        </strong>
+                    </mat-error>
+                </mat-form-field>
+                <div class="d-flex flex-column align-items-center mb-5">
+                    <mat-radio-group formControlName="gender">
+                        <mat-radio-button value="male">Male</mat-radio-button>
+                        <mat-radio-button value="female">Female</mat-radio-button>
+                        <mat-radio-button value="others">Other</mat-radio-button>
+                    </mat-radio-group>
+                    <div class="text-danger" *ngIf="getStudentGender?.invalid && getStudentGender?.touched">
+                        Please <Strong>Select</Strong> Your Gender
+                    </div>
+                </div>
+                <mat-form-field appearance="outline" class="mb-4">
+                    <mat-label>Date Of Birth</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="dob" placeholder="MM/DD/YYYY">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+                    <mat-error *ngIf="getStudentDob?.errors?.['required'] && getStudentDob?.touched">
+                        Date Of Birth Is <strong>Required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mb-4">
+                    <mat-label>Contact Number</mat-label>
+                    <span matPrefix>+91 &nbsp;</span>
+                    <input type="tel" matInput placeholder="9857478744" formControlName="contact">
+                    <mat-icon matSuffix>call</mat-icon>
+                    <mat-error *ngIf="getStudentContact?.errors?.['required'] && getStudentContact?.touched">
+                        Contact Number Is <strong>Required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="getStudentContact?.errors?.['pattern'] && getStudentContact?.touched">
+                        <strong>Invalid</strong> Contact Number
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mb-4">
+                    <mat-label>Email</mat-label>
+                    <input matInput placeholder="e.g: akashsathi@gmail.com" formControlName="email" readonly>
+                    <mat-error *ngIf="getStudentEmail?.errors?.['required'] && getStudentEmail?.touched">
+                        Email Is <strong>Required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="getStudentEmail?.errors?.['pattern'] && getStudentEmail?.touched">
+                        <strong>Invalid</strong> Email
+                    </mat-error>
+                </mat-form-field>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" mat-raised-button color="primary"
+                        [disabled]="editStudentForm.invalid || editStudentForm.pristine">Update</button>
+                    <button type="button" mat-raised-button color="accent" (click)="reset()">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

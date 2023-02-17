@@ -1,1 +1,56 @@
-<p>student-detail works!</p>
+<div class="container mt-3 p-3 bg-white">
+    <p class="fs-4 fw-bold">Student Details</p>
+    <hr>
+</div>
+
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
+</div>
+
+<section class="h-100" *ngIf="studentLoaded">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-9 col-xl-7">
+                <div class="card">
+                    <div class="rounded-top text-white d-flex flex-row"
+                        style="background-color: #3f51b5; height:200px;">
+                        <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                            <img [src]="savedStudent.imageUrl || 'assets/images/default-student-image.png'"
+                                alt="Student Image" class="img-fluid img-thumbnail mt-4 mb-2"
+                                style="width: 150px; z-index: 1">
+                        </div>
+                        <div class="ms-3" style="margin-top: 130px;">
+                            <h4 class="text-capitalize">{{savedStudent.name}}</h4>
+                            <p>{{savedStudent.email}}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 text-black" style="background-color: #f8f9fa; min-height: 100px;"></div>
+                    <div class="card-body p-4 text-black">
+                        <div class="mb-5">
+                            <p class="lead fw-normal mb-1">About</p>
+                            <div class="p-4" style="background-color: #f8f9fa;">
+                                <p class="font-italic mb-1"><strong>Id: </strong>{{savedStudent.id}}</p>
+                                <p class="font-italic mb-1"><strong>Stream: </strong>{{savedStudent.stream}}</p>
+                                <p class="font-italic mb-1"><strong>Name: </strong>{{savedStudent.name}}</p>
+                                <p class="font-italic mb-0"><strong>Gender: </strong>{{savedStudent.gender}}</p>
+                                <p class="font-italic mb-0"><strong>Date Of Birth: </strong>{{savedStudent.dob}}</p>
+                                <p class="font-italic mb-0"><strong>Contact Number: </strong>{{savedStudent.contact}}
+                                </p>
+                                <p class="font-italic mb-0"><strong>Email: </strong>{{savedStudent.email}}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <p class="lead fw-normal mb-0">Issued Books</p>
+                            <p class="mb-0">Total: 6</p>
+                        </div>
+                        <div class="row g-2" *ngFor="let issuedBook of issuedBooks">
+                            <div class="col mb-2">
+                                <p>{{issuedBook.book.title}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

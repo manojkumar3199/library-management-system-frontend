@@ -31,16 +31,14 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
       this.categoryService.getCategories().subscribe({
         next: data => {
           this.storeService.setCategories(data);
-          this.categories.data = data;
         },
         error: error => {
           console.log(error);
           this.error = error;
         }
       });
-    } else {
-      this.storeService.loadCategories().subscribe(categories => this.categories.data = categories);
     }
+    this.storeService.loadCategories().subscribe(categories => this.categories.data = categories);
   }
 
   ngAfterViewInit(): void {

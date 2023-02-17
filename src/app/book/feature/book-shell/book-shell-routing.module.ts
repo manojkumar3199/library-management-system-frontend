@@ -13,7 +13,7 @@ const routes: Routes = [
       .then(m => m.BookListModule)
   },
   { path: 'edit/:id', loadChildren: () => import('../book-edit/book-edit.module').then(m => m.BookEditModule) },
-  { path: 'detail', loadChildren: () => import('../book-detail/book-detail.module').then(m => m.BookDetailModule) }
+  { path: 'detail/:id', loadChildren: () => import('../book-detail/book-detail.module').then(m => m.BookDetailModule) }
 ];
 
 @NgModule({

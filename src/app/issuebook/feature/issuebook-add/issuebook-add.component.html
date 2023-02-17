@@ -1,1 +1,149 @@
-<p>issuebook-add works!</p>
+<div class="container mt-3 p-3 bg-white">
+    <p class="fs-4 fw-bold">Issue Book To Student</p>
+    <hr>
+</div>
+
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
+</div>
+
+<div class="container mt-3">
+    <mat-stepper #stepper>
+        <!-- Student -->
+        <mat-step label="Select Student" [stepControl]="studentForm" errorMessage="Student is required">
+            <div class="container d-flex flex-column mt-3">
+                <mat-form-field>
+                    <mat-label>Filter Student</mat-label>
+                    <input matInput (keyup)="applyStudentFilter($event)">
+                </mat-form-field>
+            </div>
+            <div class="container mt-3">
+                <form [formGroup]="studentForm">
+                    <table mat-table [dataSource]="students" matSort>
+                        <!-- Student Id -->
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Id</th>
+                            <td mat-cell *matCellDef="let student"> {{student.id}} </td>
+                        </ng-container>
+
+                        <!-- Student Name -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
+                            <td mat-cell *matCellDef="let student" class="text-capitalize"> {{student.name}} </td>
+                        </ng-container>
+
+                        <!-- Action -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let student">
+                                <mat-checkbox [formControlName]="student.id"
+                                    (change)="onStudentSelect(student, $event)">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedStudentColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedStudentColumns;"></tr>
+                    </table>
+                </form>
+            </div>
+            <div class="container mt-3">
+                <button mat-raised-button color="primary" class="fw-semibold"
+                    [disabled]="!selectedStudent || !(!categories.data.length)" (click)="loadCategories()">Fetch
+                    Categories</button>
+            </div>
+        </mat-step>
+        <!-- Category -->
+        <mat-step label="Select Category" *ngIf="categories.data.length">
+            <div class="container d-flex flex-column mt-3">
+                <mat-form-field>
+                    <mat-label>Filter Category</mat-label>
+                    <input matInput (keyup)="applyCategoryFilter($event)">
+                </mat-form-field>
+            </div>
+            <div class="container mt-3">
+                <table mat-table [dataSource]="categories" matSort>
+                    <!-- Category Id -->
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Category Id </th>
+                        <td mat-cell *matCellDef="let category"> {{category.id}} </td>
+                    </ng-container>
+
+                    <!-- Category Name -->
+                    <ng-container matColumnDef="categoryName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Category Name</th>
+                        <td mat-cell *matCellDef="let category" class="text-capitalize"> {{category.categoryName}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Action -->
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Action </th>
+                        <td mat-cell *matCellDef="let category">
+                            <mat-checkbox (change)="onCategorySelect(category, $event)"
+                                [disabled]="selectedCategory && !checkBox.checked" #checkBox>
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedCategoryColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedCategoryColumns;"></tr>
+                </table>
+            </div>
+            <div class="container mt-3">
+                <button mat-raised-button color="primary" class="fw-semibold"
+                    [disabled]="!selectedCategory || (selectedCategory.categoryName === relevantBooksCategoryName)"
+                    (click)="loadRelevantBooks()">Fetch Books</button>
+            </div>
+        </mat-step>
+        <!-- book -->
+        <mat-step label="Select Book" [stepControl]="bookForm" errorMessage="Book is required"
+            *ngIf="relevantBooks.data.length">
+            <div *ngIf="relevantBooksCategoryName" class="container mt-3">
+                <h2>
+                    Category <span class="badge bg-secondary">{{relevantBooksCategoryName}}</span>
+                </h2>
+            </div>
+            <div class="container d-flex flex-column mt-3">
+                <mat-form-field>
+                    <mat-label>Filter Book</mat-label>
+                    <input matInput (keyup)="applyBookFilter($event)">
+                </mat-form-field>
+            </div>
+            <div class="container mt-3">
+                <form [formGroup]="bookForm" #bookFormGroupDirective="ngForm">
+                    <table mat-table [dataSource]="relevantBooks" matSort>
+                        <!-- Book Id -->
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Book Id </th>
+                            <td mat-cell *matCellDef="let book"> {{book.id}} </td>
+                        </ng-container>
+
+                        <!-- Book Name -->
+                        <ng-container matColumnDef="title">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Book Tile</th>
+                            <td mat-cell *matCellDef="let book" class="text-capitalize"> {{book.title}} </td>
+                        </ng-container>
+
+                        <!-- Action -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let book">
+                                <mat-checkbox (change)="onBookSelect(book, $event)" [formControlName]="book.id">
+                                </mat-checkbox>
+                                <span class="badge rounded-pill text-bg-warning" *ngIf="book.reserved">Reserved</span>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedBookColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedBookColumns;"></tr>
+                    </table>
+                </form>
+            </div>
+            <div class="container mt-3">
+                <button mat-raised-button color="primary" class="fw-semibold"
+                    [disabled]="!selectedStudent || !selectedBook" (click)="issueBook()">Issue Book</button>
+            </div>
+        </mat-step>
+    </mat-stepper>
+</div>

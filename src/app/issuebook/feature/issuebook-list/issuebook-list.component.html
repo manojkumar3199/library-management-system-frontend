@@ -1,1 +1,59 @@
-<p>issuebook-list works!</p>
+<div class="container mt-3 p-3 bg-white">
+    <p class="fs-4 fw-bold">List Of Issued Books</p>
+    <hr>
+</div>
+
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
+</div>
+
+<div class="container mt-3 pt-3 px-3 d-flex flex-column bg-white">
+    <mat-form-field>
+        <mat-label>Filter Issued Book</mat-label>
+        <input matInput (keyup)="applyFilter($event)">
+    </mat-form-field>
+</div>
+
+<div class="container mt-3 p-3 bg-white">
+
+    <table mat-table [dataSource]="issuedBooks" matSort class="text-center">
+
+        <ng-container matColumnDef="issueId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Issue Id</th>
+            <td mat-cell *matCellDef="let issuedBook"> {{issuedBook.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="student">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Student</th>
+            <td mat-cell *matCellDef="let issuedBook"> {{issuedBook.student.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="book">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Book</th>
+            <td mat-cell *matCellDef="let issuedBook"> {{issuedBook.book.title}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="issueDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Issue Date</th>
+            <td mat-cell *matCellDef="let issuedBook"> {{issuedBook.issueDate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expiringDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Expiring Date</th>
+            <td mat-cell *matCellDef="let issuedBook"> {{issuedBook.expiringDate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let issuedBook">
+                <button mat-icon-button (click)="returnBook(issuedBook)" class="text-success" matTooltip="Return Book">
+                    <mat-icon>restart_alt</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+</div>
