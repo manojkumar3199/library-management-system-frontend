@@ -1,9 +1,10 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, finalize, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
-export class LoaderService implements HttpInterceptor {
+@Injectable({
+  providedIn: 'root'
+})
+export class LoaderService {
 
   private status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public currentStatus = this.status.asObservable();
@@ -12,14 +13,6 @@ export class LoaderService implements HttpInterceptor {
     this.status.next(status);
   }
 
-
   constructor() { }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.setStatus(true);
-    console.log(this.status.getValue());
-    return next.handle(req).pipe(
-      finalize(() => this.setStatus(false))
-    );
-  }
 }

@@ -18,6 +18,8 @@ export class BookListComponent implements OnInit {
   public error: HttpErrorResponse | null = null;
   public books$!: Observable<Book[]>;
 
+  public searchKey!: string;
+
   constructor(private bookService: BookService, private storeService: StoreService, private _snackBar: MatSnackBar, private _dialog: MatDialog, private router: Router) { }
 
   ngOnInit(): void {
@@ -37,7 +39,7 @@ export class BookListComponent implements OnInit {
 
   public applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue);
+    this.searchKey = filterValue;
   }
 
   public deleteBook(savedBook: Book): void {

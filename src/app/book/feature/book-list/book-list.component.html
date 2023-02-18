@@ -9,14 +9,14 @@
 
 <div class="container mt-3 pt-3 px-3 d-flex flex-column bg-white">
     <mat-form-field>
-        <mat-label>Filter book</mat-label>
+        <mat-label>Filter book By Title</mat-label>
         <input matInput (keyup)="applyFilter($event)">
     </mat-form-field>
 </div>
 
 <div class="container mt-3 p-3">
     <div class="row gy-5 row-cols-md-2 row-cols-lg-3">
-        <div class="col" *ngFor="let book of books$ | async">
+        <div class="col" *ngFor="let book of books$ | async | filter:searchKey:'title'">
             <mat-card>
                 <mat-card-header>
                     <mat-card-title-group>

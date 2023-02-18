@@ -77,7 +77,7 @@ export class IssuebookAddComponent implements OnInit {
 
   public applyStudentFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue);
+    this.students.filter = filterValue.trim().toLowerCase();
   }
 
   public onStudentSelect(selectedStudent: Student, event: MatCheckboxChange): void {
@@ -120,7 +120,7 @@ export class IssuebookAddComponent implements OnInit {
 
   public applyCategoryFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue);
+    this.categories.filter = filterValue.trim().toLowerCase();
   }
 
   public onCategorySelect(selectedCategory: Category, event: MatCheckboxChange): void {
@@ -167,7 +167,7 @@ export class IssuebookAddComponent implements OnInit {
 
   public applyBookFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue);
+    this.relevantBooks.filter = filterValue.trim().toLowerCase();
   }
 
   public onBookSelect(selectedBook: Book, event: MatCheckboxChange): void {

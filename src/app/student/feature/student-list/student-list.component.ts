@@ -17,6 +17,7 @@ import { StudentService } from '../../data-access/student.service';
 export class StudentListComponent implements OnInit {
   public error: HttpErrorResponse | null = null;
   public students$!: Observable<Student[]>;
+  public searchKey!: string;
 
   public imgSrc!: string;
 
@@ -39,7 +40,7 @@ export class StudentListComponent implements OnInit {
 
   public applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue);
+    this.searchKey = filterValue;
   }
 
   public deleteStudent(savedStudent: Student): void {
