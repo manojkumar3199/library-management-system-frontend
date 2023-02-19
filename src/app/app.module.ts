@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { NavModule } from './layout/ui/nav/nav.module';
 
+import { APP_BASE_HREF } from '@angular/common';
 import { AppComponent } from './app.component';
 
 
@@ -22,7 +23,7 @@ import { AppComponent } from './app.component';
     MatProgressBarModule,
     NavModule
   ],
-  providers: [],
+  providers: [{ provide: APP_BASE_HREF, useValue: '/library-management-system-frontend-compiled/' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
