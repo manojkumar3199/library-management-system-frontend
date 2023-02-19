@@ -195,6 +195,7 @@ export class IssuebookAddComponent implements OnInit {
         data.student = this.selectedStudent as Student;
         this.storeServive.addIssuedBook(data);
         this.storeServive.modifyBook(data.book);
+        this.storeServive.incrementIssuedBook();
         this._snackBar.open("Booking Is Successful!", "", { duration: 3000 });
         //updating releventBooks array & checkboxes <-- refector this in feature
         this.relevantBooks.data.map(book => {

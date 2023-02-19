@@ -50,8 +50,9 @@ export class StudentListComponent implements OnInit {
       } else {
         this.studentService.deleteStudent(savedStudent.id).subscribe({
           next: data => {
-            this._snackBar.open(savedStudent.name + " deleted successfully!", "", { duration: 3000 });
             this.storeService.removeStudent(savedStudent.id);
+            this.storeService.decrementStudent();
+            this._snackBar.open(savedStudent.name + " deleted successfully!", "", { duration: 3000 });
           },
           error: error => {
             console.log(error);

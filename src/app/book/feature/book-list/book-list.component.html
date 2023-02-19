@@ -9,14 +9,14 @@
 
 <div class="container mt-3 pt-3 px-3 d-flex flex-column bg-white">
     <mat-form-field>
-        <mat-label>Filter book By Title</mat-label>
+        <mat-label>Filter book</mat-label>
         <input matInput (keyup)="applyFilter($event)">
     </mat-form-field>
 </div>
 
 <div class="container mt-3 p-3">
     <div class="row gy-5 row-cols-md-2 row-cols-lg-3">
-        <div class="col" *ngFor="let book of books$ | async | filter:searchKey:'title'">
+        <div class="col" *ngFor="let book of books$ | async | filter:searchKey:'title,author,description,categoryName'">
             <mat-card>
                 <mat-card-header>
                     <mat-card-title-group>
@@ -33,6 +33,7 @@
                 <img mat-card-image [src]="book.imageUrl || 'assets/images/default-book-image.jpg'"
                     alt="Default Book Image" style="max-width: 400px;" (error)="setDefaultImage($event)" />
                 <mat-card-content>
+                    <p><strong>Author: </strong>{{book.author}}</p>
                     <p>{{book.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>

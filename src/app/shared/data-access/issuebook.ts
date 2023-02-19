@@ -7,5 +7,6 @@ export interface Issuebook {
     issueDate: string,
     expiringDate: string,
     fine: number,
-    student: Student
+    student: Student,
+    [key:string]: any
 }

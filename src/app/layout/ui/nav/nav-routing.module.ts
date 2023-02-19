@@ -21,6 +21,11 @@ const routes: Routes = [
         path: 'issuebook',
         loadChildren: () => import('../../../issuebook/feature/issuebook-shell/issuebook-shell.module')
             .then(m => m.IssuebookShellModule)
+    },
+    {
+        path: '',
+        loadChildren: () => import('../../../home/feature/stats/stats.module')
+            .then(m => m.StatsModule)
     }
 ];
 

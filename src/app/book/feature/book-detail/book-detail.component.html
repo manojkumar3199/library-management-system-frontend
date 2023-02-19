@@ -11,20 +11,24 @@
     <div class="d-flex flex-column align-items-center">
 
         <div class="card mb-3">
-            <h5 class="card-header">Book Id: {{savedBook.id}}</h5>
             <div class="row g-0">
-                <div class="col-md-4 bg-success">
+                <div class="col-md-4 bg-secondary">
                     <div class="d-flex flex-column justify-content-center h-100 ">
                         <img [src]="imgSrc" class="img-fluid" alt="Book Image">
                     </div>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body h-100">
-                        <div class="d-flex flex-column justify-content-between h-100">
-                            <h5 class="card-title">{{savedBook.title}}</h5>
-                            <p class="card-text">{{savedBook.description}}</p>
-                            <p class="card-text"><small class="text-muted">{{savedBook.category.categoryName}}</small>
-                            </p>
+                        <div class="d-flex flex-column justify-content-evenly h-100">
+                            <div class="mb-4">
+                                <h5 class="card-title m-0">{{savedBook.title}}</h5>
+                                <p class="card-text text-muted m-0">{{savedBook.category.categoryName}}</p>
+                            </div>
+                            <div>
+                                <p class="card-text m-0"><strong>Book Id: </strong>{{savedBook.id}}</p>
+                                <p class="card-text m-0"><strong>Author: </strong>{{savedBook.author}}</p>
+                                <p class="card-text m-0"><strong>Description: </strong>{{savedBook.description}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

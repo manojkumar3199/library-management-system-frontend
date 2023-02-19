@@ -83,6 +83,7 @@ export class BookAddComponent implements OnInit {
       next: data => {
         this._snackBar.open(data.title + " added successfully!", "", { duration: 3000 });
         this.storeService.addBook(data);
+        this.storeService.incrementBook();
         this.currentSavedBook = data;
         this.firstStep = false;
         stepper.next();

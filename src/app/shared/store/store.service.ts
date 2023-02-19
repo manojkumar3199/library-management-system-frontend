@@ -4,6 +4,7 @@ import { Book } from '../data-access/book';
 import { Category } from '../data-access/category';
 import { Image } from '../data-access/image';
 import { Issuebook } from '../data-access/issuebook';
+import { Stats } from '../data-access/stats';
 import { Student } from '../data-access/student';
 
 @Injectable({
@@ -116,6 +117,65 @@ export class StoreService {
 
   public removeIssuedBook(issuedBookId: number): void {
     this.issuedBooks$.next(this.issuedBooks$.getValue().filter(issuedBook => issuedBook.id !== issuedBookId));
+  }
+
+  //stats
+  private stats$ = new BehaviorSubject<Stats>({ totalStudents: 0, totalCategories: 0, totalBooks: 0, totalIssuedBooks: 0 });
+  public currentStats$ = this.stats$.asObservable();
+  public statsLoaded = false;
+
+  public loadStats(stats: Stats): void {
+    this.stats$.next(stats);
+    this.statsLoaded = true;
+  }
+
+  public incrementCategory(): void {
+    let currentStats = this.stats$.getValue();
+    currentStats.totalCategories = ++currentStats.totalCategories;
+    this.stats$.next(currentStats);
+  }
+
+  public decrementCategory(): void {
+    let currentStats = this.stats$.getValue();
+    currentStats.totalCategories = --currentStats.totalCategories;
+    this.stats$.next(currentStats);
+  }
+
+  public incrementBook(): void {
+    let currentStats = this.stats$.getValue();
+    currentStats.totalBooks = ++currentStats.totalBooks;
+    this.stats$.next(currentStats);
+  }
+
+  public decrementBook(): void {
+    let currentStats = this.stats$.getValue();
+    currentStats.totalBooks = --currentStats.totalBooks;
+    this.stats$.next(currentStats);
+  }
+
+  public incrementStudent(): void {
+    let currentStats = this.stats$.getValue();
+    currentStats.totalStudents = ++currentStats.totalStudents;
+    this.stats$.next(currentStats);
+  }
+
+  public decrementStudent(): void {
+    let currentStats = this.stats$.getValue();
+    currentStats.totalStudents = --currentStats.totalStudents;
+    this.stats$.next(currentStats);
+  }
+
+
+  public incrementIssuedBook(): void {
+    let currentStats = this.stats$.getValue();
+    currentStats.totalIssuedBooks = ++currentStats.totalIssuedBooks;
+    this.stats$.next(currentStats);
+  }
+
+  public decrementIssuedBook(): void {
+    let currentStats = this.stats$.getValue();
+    currentStats.totalIssuedBooks = --currentStats.totalIssuedBooks;
+    this.stats$.next(currentStats);
   }
 
   constructor() { }

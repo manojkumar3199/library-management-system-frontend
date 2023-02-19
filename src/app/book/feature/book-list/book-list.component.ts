@@ -49,8 +49,9 @@ export class BookListComponent implements OnInit {
       } else {
         this.bookService.deleteBook(savedBook.id).subscribe({
           next: data => {
-            this._snackBar.open(savedBook.title + " deleted successfully!", "", { duration: 3000 });
             this.storeService.removeBook(savedBook.id);
+            this.storeService.decrementBook();
+            this._snackBar.open(savedBook.title + " deleted successfully!", "", { duration: 3000 });
           },
           error: error => {
             console.log(error);

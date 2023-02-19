@@ -20,7 +20,7 @@ export class IssuebookListComponent implements OnInit {
   public issuedBooks = new MatTableDataSource<Issuebook>;
   public error: HttpErrorResponse | null = null;
 
-  public displayedColumns: string[] = ['issueId', 'student', 'book', 'issueDate', 'expiringDate', 'action'];
+  public displayedColumns: string[] = ['id', 'student', 'book', 'issueDate', 'expiringDate', 'action'];
 
   constructor(private issuebookService: IssuebookService, private storeService: StoreService, private cdRef: ChangeDetectorRef, private _snackBar: MatSnackBar, private _dialog: MatDialog) { }
 
@@ -40,6 +40,13 @@ export class IssuebookListComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    this.issuedBooks.sortingDataAccessor = (issuedBook, property) => {
+      switch (property) {
+        case 'student': return issuedBook.student.name;
+        case 'book': return issuedBook.book.title;
+        default: return issuedBook[property];
+      }
+    };
     this.issuedBooks.sort = this.sort;
     console.log(this.sort);
     this.cdRef.detectChanges();
@@ -47,6 +54,19 @@ export class IssuebookListComponent implements OnInit {
 
   public applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
+
+    this.issuedBooks.filterPredicate = (issuedBook, filter: string) => {
+      const accumulator = (currentTerm: string, key: string) => {
+        switch (key) {
+          case 'student': return currentTerm + issuedBook.student.name;
+          case 'book': return currentTerm + issuedBook.book.title;
+          default: return currentTerm + issuedBook[key];
+        }
+      };
+      const dataStr = Object.keys(issuedBook).reduce(accumulator, '').toLowerCase();
+      return dataStr.indexOf(filter) !== -1;
+    };
+
     this.issuedBooks.filter = filterValue.trim().toLowerCase();
   }
 
@@ -59,6 +79,7 @@ export class IssuebookListComponent implements OnInit {
         let book = issuedBook.book;
         book.reserved = false;
         this.storeService.modifyBook(book);
+        this.storeService.decrementIssuedBook();
         this._snackBar.open("Book Returned successfully!", "", { duration: 3000 })
       },
       error: error => this.error = error

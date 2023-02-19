@@ -61,6 +61,7 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
         this.categoryService.deleteCategory(savedCategory.id).subscribe({
           next: data => {
             this.storeService.removeCategory(savedCategory.id);
+            this.storeService.decrementCategory();
             this._snackBar.open(savedCategory.categoryName + " deleted successfully!", "", { duration: 3000 })
           },
           error: error => this.error = error

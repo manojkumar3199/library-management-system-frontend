@@ -42,8 +42,9 @@ export class CategoryAddComponent implements OnInit {
     let newCategory: Category = this.categoryForm.value;
     this.categoryService.saveNewCategory(newCategory).subscribe({
       next: data => {
-        this._snackBar.open(newCategory.categoryName + " added successfully!", "", { duration: 3000 });
         this.storeService.addCategory(data);
+        this.storeService.incrementCategory();
+        this._snackBar.open(newCategory.categoryName + " added successfully!", "", { duration: 3000 });
       },
       error: error => this.error = error
     });

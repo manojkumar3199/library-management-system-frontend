@@ -1,0 +1,44 @@
+<div class="container mt-3 p-3 bg-white">
+    <p class="fs-4 fw-bold">Dashboard</p>
+    <hr>
+</div>
+
+<div class="container mt-3 alert alert-danger" *ngIf="error">
+    <strong>Error: </strong>{{error.error?.error}} {{error.error?.message}}
+</div>
+
+<!-- Counters -->
+<div class="container mt-3 p-3" *ngIf="stats$ | async as stats">
+
+    <div class="row g-3 justify-content-evenly">
+        <div class="four col-md-3">
+            <div class="counter-box">
+                <i class="fa fa-group"></i>
+                <span class="counter">{{stats.totalStudents}}</span>
+                <p>Registered Students</p>
+            </div>
+        </div>
+        <div class="four col-md-3">
+            <div class="counter-box">
+                <i class="fa fa-road"></i>
+                <span class="counter">{{stats.totalCategories}}</span>
+                <p>Book Categories</p>
+            </div>
+        </div>
+        <div class="four col-md-3">
+            <div class="counter-box">
+                <i class="fa fa-book"></i>
+                <span class="counter">{{stats.totalBooks}}</span>
+                <p>Available Books</p>
+            </div>
+        </div>
+        <div class="four col-md-3">
+            <div class="counter-box">
+                <i class="fa  fa-tag"></i>
+                <span class="counter">{{stats.totalIssuedBooks}}</span>
+                <p>Reserved Books</p>
+            </div>
+        </div>
+    </div>
+
+</div>

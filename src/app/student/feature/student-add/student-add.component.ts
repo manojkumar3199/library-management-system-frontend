@@ -74,9 +74,10 @@ export class StudentAddComponent implements OnInit {
 
     this.studentService.saveNewStudent(newStudent).subscribe({
       next: data => {
-        this._snackBar.open(data.name + " added successfully!", "", { duration: 3000 });
         this.storeService.addStudent(data);
+        this.storeService.incrementStudent();
         this.currentSavedStudent = data;
+        this._snackBar.open(data.name + " added successfully!", "", { duration: 3000 });
         this.firstStep = false;
         stepper.next();
       },
